@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
+import AppBanner from './AppBanner'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
@@ -51,26 +52,29 @@ const HomeScreen = () => {
         addListClass += "-disabled";
 
     return (
-        <div id="playlist-selector">
-            <div id="list-selector-heading">
-            <Fab 
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-                className={addListClass}
-            >
-                <AddIcon />
-            </Fab>
-                <Typography variant="h3">Your Lists</Typography>
-            </div>
-            <div id="list-selector-list">
-                {
-                    listCard
-                }
-                <MUIDeleteModal />
-            </div>
-        </div>)
+        <React.Fragment>
+            <AppBanner />
+            <div id="playlist-selector">
+        <div id="list-selector-heading">
+        <Fab 
+            color="primary" 
+            aria-label="add"
+            id="add-list-button"
+            onClick={handleCreateNewList}
+            className={addListClass}
+        >
+            <AddIcon />
+        </Fab>
+            <Typography variant="h3">Your Lists</Typography>
+        </div>
+        <div id="list-selector-list">
+            {
+                listCard
+            }
+            <MUIDeleteModal />
+        </div>
+    </div></React.Fragment>
+        )
 }
 
 export default HomeScreen;
