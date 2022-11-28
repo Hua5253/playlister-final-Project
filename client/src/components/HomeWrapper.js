@@ -12,7 +12,6 @@ export default function HomeWrapper() {
     return (
       <div>
         <HomeScreen />
-        <Statusbar />
       </div>
     );
   else return <SplashScreen />;

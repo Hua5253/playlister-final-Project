@@ -1,11 +1,14 @@
-import { useContext, useState } from 'react'
-import { GlobalStoreContext } from '../store'
-import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
-import ListItem from '@mui/material/ListItem';
-import TextField from '@mui/material/TextField';
+import { useContext, useState } from "react";
+import { GlobalStoreContext } from "../store";
+import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
+import TextField from "@mui/material/TextField";
+import ThumbUpIcon from "@mui/icons-material/ThumbUpAltOutlined";
+import ThumbDownIcon from "@mui/icons-material/ThumbDownOutlined";
+import DoubleDownArrowIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -17,14 +20,14 @@ import TextField from '@mui/material/TextField';
 function ListCard(props) {
     const { idNamePair, selected } = props;
     const { store } = useContext(GlobalStoreContext);
-    const [ editActive, setEditActive ] = useState(false);
-    const [ text, setText ] = useState(idNamePair.name);
+    const [editActive, setEditActive] = useState(false);
+    const [text, setText] = useState(idNamePair.name);
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
+            if (_id.indexOf("list-card-text-") >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
             console.log("load " + event.target.id);
@@ -56,24 +59,13 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            // let id = event.target.id.substring("list-".length);        
+            // let id = event.target.id.substring("list-".length);
             handleBlur();
         }
     }
 
     // handle blur->
     function handleBlur() {
-        store.changeListName(idNamePair._id, text);
-        toggleEdit();
-    }
-
-    function handleUpdateText(event) {
-        setText(event.target.value );
-    }
-
-    // handle blur->
-    function handleBlur() {
-        // let id = event.target.id.substring("list-".length);
         store.changeListName(idNamePair._id, text);
         toggleEdit();
     }
@@ -90,55 +82,88 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-    let cardElement =
-        <ListItem
+    let cardElement = (
+        <div
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            style={{
+                marginTop: "5px",
+                display: "flex",
+                width: "100%",
+                border: "3px solid lightBlue",
+                borderRadius: "20px",
+                backgroundColor: "lightyellow",
+            }}
             button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
+            onClick={event => {
+                handleLoadList(event, idNamePair._id);
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
+            <div id='box1'>
+                <div id='list-card-title' style={{ flexGrow: 1 }}>
+                    {idNamePair.name}
+                </div>
+                <div style={{ marginLeft: "10px" }}>By: </div>
+                <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
+                    published:
+                </div>
+            </div>
+            <div id='box2' style={{position:'relative'}}>
+                <div style={{ marginLeft: "10px" }}>
+                    <IconButton>
+                        <ThumbUpIcon />
+                    </IconButton>
+                    10
+                    <IconButton>
+                        <ThumbDownIcon />
+                    </IconButton>
+                    10
+                </div>
+                <div style={{position:'absolute', right:'20px'}}>
+                    <DoubleDownArrowIcon />
+                </div>
+            </div>
+
+            {/* <div >
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
+                    <EditIcon style={{ fontSize: "48pt" }} />
                 </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
+            </div>
+            <div >
+                <IconButton
+                    onClick={event => {
+                        handleDeleteList(event, idNamePair._id);
+                    }}
+                    aria-label='delete'
+                >
+                    <DeleteIcon style={{ fontSize: "48pt" }} />
                 </IconButton>
-            </Box>
-        </ListItem>
+            </div> */}
+        </div>
+    );
 
     if (editActive) {
-        cardElement =
+        cardElement = (
             <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
                 id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
+                label='Playlist Name'
+                name='name'
+                autoComplete='Playlist Name'
                 className='list-card'
                 onKeyPress={handleKeyPress}
                 onBlur={handleBlur}
                 onChange={handleUpdateText}
                 defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
+                inputProps={{ style: { fontSize: 48 } }}
+                InputLabelProps={{ style: { fontSize: 24 } }}
                 autoFocus
             />
+        );
     }
-    return (
-        cardElement
-    );
+    return cardElement;
 }
 
 export default ListCard;
