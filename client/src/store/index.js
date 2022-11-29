@@ -104,8 +104,8 @@ function GlobalStoreContextProvider(props) {
       case GlobalStoreActionType.CREATE_NEW_LIST: {
         return setStore({
           currentModal: CurrentModal.NONE,
-          idNamePairs: store.idNamePairs,
-          currentList: payload,
+          idNamePairs: payload.idNamePairs,
+          currentList: payload.playlist,
           currentSongIndex: -1,
           currentSong: null,
           newListCounter: store.newListCounter + 1,
@@ -284,13 +284,21 @@ function GlobalStoreContextProvider(props) {
       if (response.status === 201) {
         tps.clearAllTransactions();
         let newList = response.data.playlist;
-        storeReducer({
-          type: GlobalStoreActionType.CREATE_NEW_LIST,
-          payload: newList,
-        });
-  
+        let result = await api.getPlaylistPairs();
+        console.log(result);
+        if (result.data.success) {
+          let pairsArray = result.data.idNamePairs;
+          storeReducer({
+            type: GlobalStoreActionType.CREATE_NEW_LIST,
+            payload: {
+              idNamePairs: pairsArray,
+              playlist: newList
+            }
+          });
+        }
+        
+        console.log(newList);
         // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-        history.push("/");
       } else {
         console.log("API FAILED TO CREATE A NEW LIST");
       }
@@ -403,7 +411,6 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_CURRENT_LIST,
             payload: playlist,
           });
-          // history.push("/playlist/" + playlist._id);
         }
       }
     }
