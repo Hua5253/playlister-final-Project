@@ -1,13 +1,10 @@
 import { useContext } from "react";
-import { useHistory } from "react-router-dom";
 import SongCard from "./SongCard.js";
-import AppBanner from "./AppBanner";
+import AddIcon from '@mui/icons-material/AddOutlined';
 import MUIEditSongModal from "./MUIEditSongModal";
 import MUIRemoveSongModal from "./MUIRemoveSongModal";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
 import { GlobalStoreContext } from "../store/index.js";
-import Statusbar from "./Statusbar.js";
+import { IconButton } from "@mui/material";
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
@@ -16,7 +13,10 @@ import Statusbar from "./Statusbar.js";
 */
 function WorkspaceScreen() {
   const { store } = useContext(GlobalStoreContext);
-  store.history = useHistory();
+
+  function handleAddNewSong() {
+    store.addNewSong();
+}
 
   let modalJSX = "";
   if (store.isEditSongModalOpen()) {
@@ -24,12 +24,11 @@ function WorkspaceScreen() {
   } else if (store.isRemoveSongModalOpen()) {
     modalJSX = <MUIRemoveSongModal />;
   }
+
   return (
-    <Box>
-      <AppBanner />
-      <List
+      <div
         id='playlist-cards'
-        sx={{ width: "100%", bgcolor: "background.paper" }}
+        style={{ width: "100%" }}
       >
         {store.currentList.songs.map((song, index) => (
           <SongCard
@@ -39,10 +38,13 @@ function WorkspaceScreen() {
             song={song}
           />
         ))}
-      </List>
-      {modalJSX}
-      <Statusbar />
-    </Box>
+        <div style={{position:'relative', left:'45%'}}>
+          <IconButton size="large" onClick={handleAddNewSong}>
+            <AddIcon />
+          </IconButton>
+        </div>
+        {modalJSX}
+      </div>
   );
 }
 

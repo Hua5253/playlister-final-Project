@@ -187,12 +187,28 @@ p {
   background-color: #48488f;
 }
 
-#box1 {
+#unexpand-box1 {
   width: 50%;
 }
 
-#box2 {
-  width: 50%
+#unexpand-box2 {
+  width: 50%;
+  position: relative;
+}
+
+#expand-box1 {
+  height: 15%;
+  width: 100%;
+}
+
+#expand-box2 {
+  height: auto;
+
+}
+
+#expand-box3 {
+  height: 15%;
+  position: absolute;
 }
 
 #list-card-title {
@@ -235,7 +251,7 @@ p {
 
 .list-card-button {
   float: right;
-  transform: scale(2);
+  transform: scale(1);
 }
 
 #workspace-home,
