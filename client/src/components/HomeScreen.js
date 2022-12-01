@@ -1,15 +1,20 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalStoreContext } from "../store";
 import AppBanner from "./AppBanner";
 import ListCard from "./ListCard.js";
 import MUIDeleteModal from "./MUIDeleteModal";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
+import YouTube from "react-youtube";
 import AppFooter from "./AppFooter";
 import Navbar from "./Navbar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import PreviousIcon from '@mui/icons-material/FastRewind';
+import NextIcon from '@mui/icons-material/FastForward';
+import PlayIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import { IconButton } from "@mui/material";
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -18,6 +23,17 @@ import Navbar from "./Navbar";
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+
+    const [value, setValue] = useState(0);
+    const [songIndex, setSongIndex] = useState(0);
+
+    function resetSongIndex() {
+        setSongIndex(0);
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -31,7 +47,6 @@ const HomeScreen = () => {
                 style={{
                     width: "100%",
                     borderRadius: "20px",
-                    
                 }}
             >
                 {store.idNamePairs.map(pair => (
@@ -39,21 +54,111 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songIndex={songIndex}
+                        resetSongIndex={resetSongIndex}
                     />
                 ))}
             </div>
         );
     }
 
-    // fool proof design ->
-    let isListModalOpen = store.isDeleteListModalOpen();
-    let editStatus = false;
-    if (store.listNameActive) {
-        editStatus = true;
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role='tabpanel'
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box sx={{ p: 3 }}>
+                        <Typography>{children}</Typography>
+                    </Box>
+                )}
+            </div>
+        );
     }
 
-    let addListClass = "playlister-button";
-    if (isListModalOpen || editStatus) addListClass += "-disabled";
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            "aria-controls": `simple-tabpanel-${index}`,
+        };
+    }
+
+    const opts = {
+        height: "390px",
+        width: "100%",
+        playerVars: {
+            // https://developers.google.com/youtube/player_parameters
+            autoplay: 0,
+        },
+    };
+
+    let song_id = "";
+    let songIds = [];
+    let player;
+
+    if (store.currentList) {
+        let songs = store.currentList.songs;
+        for (let song of songs)
+            songIds.push(song.youTubeId);
+        song_id = songIds[songIndex];
+    }
+
+    console.log(song_id);
+    console.log(songIndex);
+
+    function loadAndPlayCurrentSong(player) {
+        let song = songIds[songIndex];
+        player.loadVideoById(song);
+        player.playVideo();
+    }
+
+    function onPlayerReady(event) {
+        player = event.target;
+        loadAndPlayCurrentSong(player);
+    }
+
+    function incSong() {
+        let index = (songIndex + 1) % songIds.length;
+        setSongIndex(index);
+    }
+
+    function onPlayerStateChange(event) {
+        let playerStatus = event.data;
+        if (playerStatus === 0) {
+            // THE VIDEO HAS COMPLETED PLAYING
+            console.log("0 Video ended");
+            incSong();
+            loadAndPlayCurrentSong(player);
+        }
+    }
+
+    function handlePlay() {
+        player.playVideo();
+    }
+
+    function handlePause() {
+        player.pauseVideo();
+    }
+
+    function handleNext() {
+        incSong();
+        song_id = songIds[songIndex];
+        player.playVideo();
+    }
+
+    function handlePrevious() {
+        let index = (songIndex - 1) % songIds.length;
+        if (index < 0) index = 0;
+        setSongIndex(index);
+        song_id = songIds[songIndex];
+        player.playVideo();
+    }
 
     return (
         <React.Fragment>
@@ -64,8 +169,40 @@ const HomeScreen = () => {
                     {listCard}
                     <MUIDeleteModal />
                 </div>
+
                 <div id='container-right-side'>
-                    <p style={{fontSize: '50px'}}>W T F</p>
+                    <Box sx={{ width: "100%" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <Tabs
+                                value={value}
+                                onChange={handleChange}
+                                
+                            >
+                                <Tab label='Player' {...a11yProps(0)} sx={{background:"grey", borderRadius:"10px"} }/>
+                                <Tab label='Comments' {...a11yProps(1)} />
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={value} index={0}>
+                            <YouTube videoId={song_id} opts={opts} onReady={onPlayerReady} onStateChange={onPlayerStateChange}/>
+                            <div id="player-controller">
+                                <IconButton size="large" onClick={handlePrevious}>
+                                    <PreviousIcon />
+                                </IconButton>
+                                <IconButton onClick={handlePause}>
+                                    <StopIcon />
+                                </IconButton>
+                                <IconButton onClick={handlePlay}>
+                                    <PlayIcon />
+                                </IconButton>
+                                <IconButton onClick={handleNext}>
+                                    <NextIcon />
+                                </IconButton>
+                            </div>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            Comments
+                        </TabPanel>
+                    </Box>
                 </div>
             </div>
             <AppFooter />

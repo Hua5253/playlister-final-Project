@@ -20,7 +20,7 @@ import WorkspaceScreen from "./WorkspaceScreen";
     @author McKilla Gorilla
 */
 function ListCard(props) {
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, songIndex, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState(idNamePair.name);
@@ -34,6 +34,7 @@ function ListCard(props) {
     function handleUnexpand() {
         setIsExpand(false);
         store.closeCurrentList();
+        resetSongIndex();
     }
 
     function handleDeleteList(event, id) {
