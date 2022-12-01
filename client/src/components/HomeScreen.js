@@ -90,7 +90,7 @@ const HomeScreen = () => {
     }
 
     const opts = {
-        height: "390px",
+        height: "300px",
         width: "100%",
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
@@ -108,9 +108,6 @@ const HomeScreen = () => {
             songIds.push(song.youTubeId);
         song_id = songIds[songIndex];
     }
-
-    console.log(song_id);
-    console.log(songIndex);
 
     function loadAndPlayCurrentSong(player) {
         let song = songIds[songIndex];
@@ -171,19 +168,23 @@ const HomeScreen = () => {
                 </div>
 
                 <div id='container-right-side'>
-                    <Box sx={{ width: "100%" }}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <div style={{ width: "100%", display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ borderBottom: 1, borderColor: "divider" }}>
                             <Tabs
                                 value={value}
                                 onChange={handleChange}
-                                
+                                sx={{height: "50px"}}
                             >
-                                <Tab label='Player' {...a11yProps(0)} sx={{background:"grey", borderRadius:"10px"} }/>
-                                <Tab label='Comments' {...a11yProps(1)} />
+                                <Tab label='Player' {...a11yProps(0)} sx={{background:"grey", borderRadius:"10px"}}/>
+                                <Tab label='Comments' {...a11yProps(1)} sx={{background:"grey", borderRadius:"10px"}}/>
                             </Tabs>
-                        </Box>
+                        </div>
                         <TabPanel value={value} index={0}>
                             <YouTube videoId={song_id} opts={opts} onReady={onPlayerReady} onStateChange={onPlayerStateChange}/>
+                            <div>Playlist: {store.currentList ? store.currentList.name : ""} </div>
+                            <div>song #: {(store.currentList && store.currentList.songs.length > 0) ? (songIndex+1) : ""}</div>
+                            <div>title: {(store.currentList && store.currentList.songs.length > 0) ? store.currentList.songs[songIndex].title : ""} </div>
+                            <div>artist: {(store.currentList && store.currentList.songs.length > 0) ? store.currentList.songs[songIndex].artist : ""}</div>
                             <div id="player-controller">
                                 <IconButton size="large" onClick={handlePrevious}>
                                     <PreviousIcon />
@@ -202,7 +203,7 @@ const HomeScreen = () => {
                         <TabPanel value={value} index={1}>
                             Comments
                         </TabPanel>
-                    </Box>
+                    </div>
                 </div>
             </div>
             <AppFooter />

@@ -94,6 +94,7 @@ function AuthContextProvider(props) {
   };
 
   auth.registerUser = async function (
+    userName,
     firstName,
     lastName,
     email,
@@ -102,6 +103,7 @@ function AuthContextProvider(props) {
   ) {
     try {
       const response = await api.registerUser(
+        userName,
         firstName,
         lastName,
         email,
@@ -115,7 +117,7 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        history.push("/");
+        history.push("/login");
       }
     } catch (error) {
       let errorMessage = error.response.data.errorMessage;
@@ -173,6 +175,11 @@ function AuthContextProvider(props) {
     // console.log("user initials: " + initials);
     return initials;
   };
+
+  auth.getUserName = function() {
+    if (auth.user) return auth.user.userName;
+    return null;
+  }
 
   auth.hideMode = function () {
     authReducer({

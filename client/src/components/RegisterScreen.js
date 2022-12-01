@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import AuthContext from '../auth'
-import Copyright from './Copyright'
+import AuthContext from '../auth';
+import Copyright from './Copyright';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -20,6 +20,7 @@ export default function RegisterScreen() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         auth.registerUser(
+            formData.get('userName'),
             formData.get('firstName'),
             formData.get('lastName'),
             formData.get('email'),
@@ -47,6 +48,16 @@ export default function RegisterScreen() {
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="userName"
+                                        label="User Name"
+                                        name="userName"
+                                        autoComplete="user name"
+                                    />
+                                </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="fname"

@@ -1,10 +1,7 @@
 import { useContext, useState } from "react";
+import AuthContext from '../auth';
 import { GlobalStoreContext } from "../store";
-import Box from "@mui/material/Box";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import ThumbUpIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDownOutlined";
@@ -20,8 +17,9 @@ import WorkspaceScreen from "./WorkspaceScreen";
     @author McKilla Gorilla
 */
 function ListCard(props) {
-    const { idNamePair, selected, songIndex, resetSongIndex } = props;
+    const { idNamePair, selected, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState(idNamePair.name);
     const [isExpand, setIsExpand] = useState(false);
@@ -109,7 +107,7 @@ function ListCard(props) {
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: </div>
+                    <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()} </div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
                         published:
                     </div>
@@ -162,7 +160,7 @@ function ListCard(props) {
             >
                 <div id='expand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: </div>
+                    <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()}</div>
                 </div>
 
                 <div id='expand-box2'>
@@ -214,7 +212,7 @@ function ListCard(props) {
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: </div>
+                    <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()}</div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
                         published:
                     </div>
