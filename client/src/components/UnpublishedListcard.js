@@ -138,7 +138,6 @@ export default function UnpublishedListcard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
             >
                 <div id='expand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>

@@ -7,7 +7,6 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDownOutlined";
 import DoubleDownArrowIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import DoubleUpArrowIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
-import WorkspaceScreen from "./WorkspaceScreen";
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -42,47 +41,12 @@ export default function PublishedListCard(props) {
         store.markListForDeletion(id);
     }
 
-    function handleUndo() {
-        store.undo();
+    function handleLike() {
+        // store.likePlaylistById(idNamePair._id);
     }
 
-    function handleRedo() {
-        store.redo();
-    }
+    function handleDislike() {
 
-    function handleToggleEdit(event) {
-        event.stopPropagation();
-        toggleEdit();
-    }
-
-    function toggleEdit() {
-        let newActive = !editActive;
-        if (newActive) {
-            store.setIsListNameEditActive();
-        }
-        setEditActive(newActive);
-    }
-
-    function handleKeyPress(event) {
-        if (event.code === "Enter") {
-            // let id = event.target.id.substring("list-".length);
-            handleBlur();
-        }
-    }
-
-    // handle blur->
-    function handleBlur() {
-        store.changeListName(idNamePair._id, text);
-        toggleEdit();
-    }
-
-    function handleUpdateText(event) {
-        setText(event.target.value);
-    }
-
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
     }
 
     let cardElement;
@@ -99,22 +63,21 @@ export default function PublishedListCard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
                     <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()} </div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
-                        published:
+                        published: {idNamePair.publishedDate}
                     </div>
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton>
+                        <IconButton onClick={handleLike}>
                             <ThumbUpIcon />
                         </IconButton>
                         10
-                        <IconButton>
+                        <IconButton onClick={handleDislike}>
                             <ThumbDownIcon />
                         </IconButton>
                         10
@@ -152,7 +115,6 @@ export default function PublishedListCard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
             >
                 <div id='expand-box1'>
                     <div style={{ display: "flex" }}>
@@ -161,11 +123,11 @@ export default function PublishedListCard(props) {
                             <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()}</div>
                         </div>
                         <div style={{ marginLeft: "10px" }}>
-                            <IconButton>
+                            <IconButton onClick={handleLike}>
                                 <ThumbUpIcon />
                             </IconButton>
                             10
-                            <IconButton>
+                            <IconButton onClick={handleDislike}>
                                 <ThumbDownIcon />
                             </IconButton>
                             10
@@ -186,6 +148,7 @@ export default function PublishedListCard(props) {
                         <button style={{ marginLeft: "60%" }} onClick={(event) => handleDeleteList(event, idNamePair._id)}>Delete</button>
                         <button style={{ marginLeft: "5%" }}>Duplicate</button>
                     </div>
+                    <div style={{marginLeft:"10px", marginBottom:"15px"}}>published: {store.currentList.publishedDate} </div>
                     <div
                         style={{
                             position: "absolute",
@@ -213,22 +176,21 @@ export default function PublishedListCard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
                     <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()}</div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
-                        published:
+                        published: {idNamePair.publishedDate}
                     </div>
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton>
+                        <IconButton onClick={handleLike}>
                             <ThumbUpIcon />
                         </IconButton>
                         10
-                        <IconButton>
+                        <IconButton onClick={handleDislike}>
                             <ThumbDownIcon />
                         </IconButton>
                         10
@@ -254,26 +216,5 @@ export default function PublishedListCard(props) {
         );
     }
 
-    if (editActive && !isExpand) {
-        cardElement = (
-            <TextField
-                margin='normal'
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label='Playlist Name'
-                name='name'
-                autoComplete='Playlist Name'
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onBlur={handleBlur}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{ style: { fontSize: 48 } }}
-                InputLabelProps={{ style: { fontSize: 24 } }}
-                autoFocus
-            />
-        );
-    }
     return cardElement;
 }

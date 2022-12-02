@@ -235,6 +235,9 @@ function GlobalStoreContextProvider(props) {
   store.publishPlaylist = function() {
     let list = store.currentList;
     list.isPublished = true;
+    let now = new Date();
+    list.publishedDate = now.toDateString();
+    console.log(list);
 
     // store.updateCurrentList();
     async function asyncPublishPlaylist() {
@@ -255,18 +258,6 @@ function GlobalStoreContextProvider(props) {
     }
     asyncPublishPlaylist();
   };
-
-  store.getPlaylistById = function(id) {
-    async function asyncGetPlaylistById(id) {   
-      let playlist; 
-      let response = await api.getPlaylistById(id);
-      if (response.data.success) {
-        playlist = response.data.playlist;
-      }
-      return playlist;
-    } 
-    return asyncGetPlaylistById(id);
-  }
 
   // THIS FUNCTION PROCESSES CHANGING A LIST NAME
   store.changeListName = function (id, newName) {
