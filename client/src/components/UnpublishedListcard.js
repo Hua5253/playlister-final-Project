@@ -18,6 +18,7 @@ export default function UnpublishedListcard(props) {
     function handleExpand() {
         store.setCurrentList(idNamePair._id);
         setIsExpand(true);
+        resetSongIndex();
     }
 
     function handleUnexpand() {
