@@ -25,6 +25,7 @@ const api = axios.create({
 export const createPlaylist = (newListName, newSongs, userEmail) => {
     return api.post(`/playlist/`, {
         // SPECIFY THE PAYLOAD
+        isPublished: false,
         name: newListName,
         songs: newSongs,
         ownerEmail: userEmail

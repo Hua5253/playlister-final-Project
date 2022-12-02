@@ -183,7 +183,7 @@ export default function PublishedListCard(props) {
 
                 <div id='expand-box3' style={{ position: "relative" }}>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <button style={{ marginLeft: "60%" }}>Publish</button>
+                        <button style={{ marginLeft: "60%" }} onClick={(event) => handleDeleteList(event, idNamePair._id)}>Delete</button>
                         <button style={{ marginLeft: "5%" }}>Duplicate</button>
                     </div>
                     <div

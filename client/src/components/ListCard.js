@@ -1,6 +1,3 @@
-import { useContext, useState } from "react";
-import AuthContext from '../auth';
-import { GlobalStoreContext } from "../store";
 import PublishedListCard from "./PublishedListCard";
 import UnpublishedListcard from "./UnpublishedListcard";
 
@@ -13,11 +10,11 @@ import UnpublishedListcard from "./UnpublishedListcard";
 */
 function ListCard(props) {
     const { idNamePair, resetSongIndex } = props;
-
-    let isPublished = true;
+   
+    let isPublished = idNamePair.isPublished;
     if (isPublished)
-        return <UnpublishedListcard idNamePair={idNamePair} resetSongIndex={resetSongIndex}/>
-    else return <PublishedListCard idNamePair={idNamePair} resetSongIndex={resetSongIndex}/>
+    return <PublishedListCard idNamePair={idNamePair} resetSongIndex={resetSongIndex}/>
+    else return <UnpublishedListcard idNamePair={idNamePair} resetSongIndex={resetSongIndex}/>
 }
 
 export default ListCard;

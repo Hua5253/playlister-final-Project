@@ -8,13 +8,21 @@ const Schema = mongoose.Schema
 */
 const playlistSchema = new Schema(
     {
+        isPublished: { type: Boolean, required: true },
+        PublishedDate: {type: Date, required: false},
+        likes: {type: Number, required: false},
+        dislikes: {type: Number, required: false},
+        listens: {type: Number, required: false},
+        comments: {type: [String], required: false},
         name: { type: String, required: true },
         ownerEmail: { type: String, required: true },
-        songs: { type: [{
-            title: String,
-            artist: String,
-            youTubeId: String
-        }], required: true }
+        songs: {
+            type: [{
+                title: String,
+                artist: String,
+                youTubeId: String
+            }], required: true
+        }
     },
     { timestamps: true },
 )

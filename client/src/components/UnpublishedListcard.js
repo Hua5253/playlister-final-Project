@@ -7,6 +7,7 @@ import DoubleDownArrowIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutl
 import DoubleUpArrowIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import WorkspaceScreen from "./WorkspaceScreen";
 
+
 export default function UnpublishedListcard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
@@ -40,6 +41,10 @@ export default function UnpublishedListcard(props) {
 
     function handleRedo() {
         store.redo();
+    }
+
+    function handlePublish() {
+        store.publishPlaylist();
     }
 
     function handleToggleEdit(event) {
@@ -149,7 +154,7 @@ export default function UnpublishedListcard(props) {
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                         <button style={{ marginLeft: "20px" }} onClick={handleUndo}>Undo</button>
                         <button style={{ marginLeft: "5%" }} onClick={handleRedo}>Redo</button>
-                        <button style={{ marginLeft: "5%" }}>Publish</button>
+                        <button style={{ marginLeft: "5%" }} onClick={handlePublish}>Publish</button>
                         <button
                             style={{ marginLeft: "5%" }}
                             onClick={(event) => handleDeleteList(event, idNamePair._id)}
