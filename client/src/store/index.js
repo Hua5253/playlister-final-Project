@@ -27,6 +27,7 @@ export const GlobalStoreActionType = {
   LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
   MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
   SET_CURRENT_LIST: "SET_CURRENT_LIST",
+  SET_LIST_TO_PLAY: "SET_LIST_TO_PLAY",
   SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
   EDIT_SONG: "EDIT_SONG",
   REMOVE_SONG: "REMOVE_SONG",
@@ -49,6 +50,7 @@ const CurrentModal = {
 function GlobalStoreContextProvider(props) {
   // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
   const [store, setStore] = useState({
+    listBeingPlay: null,
     currentModal: CurrentModal.NONE,
     idNamePairs: [],
     currentList: null,
@@ -75,6 +77,7 @@ function GlobalStoreContextProvider(props) {
       // LIST UPDATE OF ITS NAME
       case GlobalStoreActionType.CHANGE_LIST_NAME: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: payload.idNamePairs,
           currentList: null,
@@ -89,6 +92,7 @@ function GlobalStoreContextProvider(props) {
       // STOP EDITING THE CURRENT LIST
       case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: store.idNamePairs,
           currentList: null,
@@ -103,6 +107,7 @@ function GlobalStoreContextProvider(props) {
       // CREATE A NEW LIST
       case GlobalStoreActionType.CREATE_NEW_LIST: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: payload.idNamePairs,
           currentList: payload.playlist,
@@ -117,6 +122,7 @@ function GlobalStoreContextProvider(props) {
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
       case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: payload,
           currentList: null,
@@ -131,6 +137,7 @@ function GlobalStoreContextProvider(props) {
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.DELETE_LIST,
           idNamePairs: store.idNamePairs,
           currentList: null,
@@ -145,6 +152,7 @@ function GlobalStoreContextProvider(props) {
       // UPDATE A LIST
       case GlobalStoreActionType.SET_CURRENT_LIST: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: store.idNamePairs,
           currentList: payload,
@@ -156,9 +164,24 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
         });
       }
+      case GlobalStoreActionType.SET_LIST_TO_PLAY: {
+        return setStore({
+          listBeingPlay: payload,
+          currentModal: CurrentModal.NONE,
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          currentSongIndex: -1,
+          currentSong: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+        });
+      }
       // START EDITING A LIST NAME
       case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: store.idNamePairs,
           currentList: payload,
@@ -173,6 +196,7 @@ function GlobalStoreContextProvider(props) {
       //
       case GlobalStoreActionType.EDIT_SONG: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.EDIT_SONG,
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
@@ -186,6 +210,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.REMOVE_SONG: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.REMOVE_SONG,
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
@@ -199,6 +224,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.HIDE_MODALS: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
@@ -212,6 +238,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.UNMARK_LIST_FOR_DELETION: {
         return setStore({
+          listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
@@ -239,7 +266,6 @@ function GlobalStoreContextProvider(props) {
     list.publishedDate = now.toDateString();
     console.log(list);
 
-    // store.updateCurrentList();
     async function asyncPublishPlaylist() {
       let response = await api.updatePlaylistById(list._id, list);
       if (response.data.success) {
@@ -258,6 +284,56 @@ function GlobalStoreContextProvider(props) {
     }
     asyncPublishPlaylist();
   };
+
+  store.likePlaylistById = function(id) {
+    async function asyncLikePlaylistById(id) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        playlist.likes = playlist.likes + 1;
+        response = await api.updatePlaylistById(playlist._id, playlist);
+        if (response.data.success) {
+          async function getListPairs() {
+            response = await api.getPlaylistPairs();
+            if (response.data.success) {
+              let pairsArray = response.data.idNamePairs;
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                payload: pairsArray,
+              })
+            }
+          }
+          getListPairs();
+        }
+      }
+    }
+    asyncLikePlaylistById(id);
+  }
+
+  store.dislikePlaylistById = function(id) {
+    async function asyncdislikePlaylistById(id) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        playlist.dislikes = playlist.dislikes + 1;
+        response = await api.updatePlaylistById(playlist._id, playlist);
+        if (response.data.success) {
+          async function getListPairs() {
+            response = await api.getPlaylistPairs();
+            if (response.data.success) {
+              let pairsArray = response.data.idNamePairs;
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                payload: pairsArray,
+              })
+            }
+          }
+          getListPairs();
+        }
+      }
+    }
+    asyncdislikePlaylistById(id);
+  }
 
   // THIS FUNCTION PROCESSES CHANGING A LIST NAME
   store.changeListName = function (id, newName) {
@@ -447,6 +523,20 @@ function GlobalStoreContextProvider(props) {
     asyncSetCurrentList(id);
   };
 
+  store.setListToPlay = function(id) {
+    async function asyncSetListToPlay(id) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        storeReducer({
+          type: GlobalStoreActionType.SET_LIST_TO_PLAY,
+          payload: playlist,
+        })
+      }
+    }
+    asyncSetListToPlay(id);
+  }
+
   store.getPlaylistSize = function () {
     return store.currentList.songs.length;
   };
@@ -509,9 +599,9 @@ function GlobalStoreContextProvider(props) {
     let playlistSize = store.getPlaylistSize();
     store.addCreateSongTransaction(
       playlistSize,
-      "Untitled",
-      "?",
-      "L229QDxDakU"
+      "Tomboy",
+      "IDLE",
+      "Jh4QFaPmdss"
     );
   };
   // THIS FUNCDTION ADDS A CreateSong_Transaction TO THE TRANSACTION STACK

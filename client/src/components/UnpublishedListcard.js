@@ -16,7 +16,8 @@ export default function UnpublishedListcard(props) {
     const [text, setText] = useState(idNamePair.name);
     const [isExpand, setIsExpand] = useState(false);
 
-    function handleExpand() {
+    function handleExpand(event) {
+        event.stopPropagation();
         store.setCurrentList(idNamePair._id);
         setIsExpand(true);
         resetSongIndex();
@@ -50,6 +51,17 @@ export default function UnpublishedListcard(props) {
     function handleToggleEdit(event) {
         event.stopPropagation();
         toggleEdit();
+    }
+
+    function handlePlaylistClicked(event) {
+        console.log(event.detail);
+        if (event.detail === 1)
+            store.setListToPlay(idNamePair._id);
+        else if (event.detail === 2) {
+            event.stopPropagation();
+            toggleEdit()
+        }
+        else return;
     }
 
     function toggleEdit() {
@@ -96,7 +108,8 @@ export default function UnpublishedListcard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
+                // onDoubleClick={handleToggleEdit}
+                onClick={(event) => handlePlaylistClicked(event)}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
@@ -114,8 +127,7 @@ export default function UnpublishedListcard(props) {
                     >
                         <IconButton
                             onClick={
-                                // handleLoadList(event, idNamePair._id);
-                                handleExpand
+                                (event) => handleExpand(event)
                             }
                         >
                             <DoubleDownArrowIcon fontSize='large' />
@@ -189,7 +201,8 @@ export default function UnpublishedListcard(props) {
                     borderRadius: "20px",
                     backgroundColor: "lightyellow",
                 }}
-                onDoubleClick={handleToggleEdit}
+                // onDoubleClick={handleToggleEdit}
+                onClick={(event) => {handlePlaylistClicked(event)}}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
@@ -207,8 +220,7 @@ export default function UnpublishedListcard(props) {
                     >
                         <IconButton
                             onClick={
-                                // handleLoadList(event, idNamePair._id);
-                                handleExpand
+                                (event) => handleExpand(event)
                             }
                         >
                             <DoubleDownArrowIcon fontSize='large' />

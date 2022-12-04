@@ -246,6 +246,14 @@ p {
   pointer-events: none;
 }
 
+.unselected-playlist {
+  background-color: lightyellow;
+}
+
+.selected-playlist {
+  background-color: #48488f;
+}
+
 .unselected-list-card:hover {
   cursor: pointer;
   background-color: var(--swatch-contrast);

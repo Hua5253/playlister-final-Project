@@ -40,7 +40,7 @@ const HomeScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    console.log(store.idNamePairs);
+    // console.log(store.idNamePairs);
 
     let listCard = "";
     if (store) {
@@ -104,8 +104,8 @@ const HomeScreen = () => {
     let songIds = [];
     let player;
 
-    if (store.currentList) {
-        let songs = store.currentList.songs;
+    if (store.listBeingPlay) {
+        let songs = store.listBeingPlay.songs;
         for (let song of songs)
             songIds.push(song.youTubeId);
         song_id = songIds[songIndex];
@@ -183,10 +183,10 @@ const HomeScreen = () => {
                         </div>
                         <TabPanel value={value} index={0}>
                             <YouTube videoId={song_id} opts={opts} onReady={onPlayerReady} onStateChange={onPlayerStateChange}/>
-                            <div>Playlist: {store.currentList ? store.currentList.name : ""} </div>
-                            <div>song #: {(store.currentList && store.currentList.songs.length > 0) ? (songIndex+1) : ""}</div>
-                            <div>title: {(store.currentList && store.currentList.songs.length > 0) ? store.currentList.songs[songIndex].title : ""} </div>
-                            <div>artist: {(store.currentList && store.currentList.songs.length > 0) ? store.currentList.songs[songIndex].artist : ""}</div>
+                            <div>Playlist: {store.listBeingPlay ? store.listBeingPlay.name : ""} </div>
+                            <div>song #: {(store.listBeingPlay && store.listBeingPlay.songs.length > 0) ? (songIndex+1) : ""}</div>
+                            <div>title: {(store.listBeingPlay && store.listBeingPlay.songs.length > 0) ? store.listBeingPlay.songs[songIndex].title : ""} </div>
+                            <div>artist: {(store.listBeingPlay && store.listBeingPlay.songs.length > 0) ? store.listBeingPlay.songs[songIndex].artist : ""}</div>
                             <div id="player-controller">
                                 <IconButton size="large" onClick={handlePrevious}>
                                     <PreviousIcon />

@@ -19,17 +19,16 @@ export default function PublishedListCard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const [editActive, setEditActive] = useState(false);
-    const [text, setText] = useState(idNamePair.name);
-    const [isExpand, setIsExpand] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+    const [isDisliked, setIsDisliked] = useState(false);
 
-    function handleExpand() {
+    function handleExpand(event) {
+        event.stopPropagation();
         store.setCurrentList(idNamePair._id);
-        setIsExpand(true);
     }
 
-    function handleUnexpand() {
-        setIsExpand(false);
+    function handleUnexpand(event) {
+        event.stopPropagation();
         store.closeCurrentList();
         resetSongIndex();
     }
@@ -40,13 +39,26 @@ export default function PublishedListCard(props) {
         _id = ("" + _id).substring("delete-list-".length);
         store.markListForDeletion(id);
     }
-
+    
     function handleLike() {
-        // store.likePlaylistById(idNamePair._id);
+        store.likePlaylistById(idNamePair._id);
+        setIsLiked(true);
     }
 
     function handleDislike() {
+        store.dislikePlaylistById(idNamePair._id);
+        setIsDisliked(true);
+    }
 
+    function handlePlaylistClicked(event) {
+        if (event.detail === 1)
+            store.setListToPlay(idNamePair._id);
+        else return;
+    }
+
+    let className = "unselected-playlist";
+    if (store.listBeingPlay && store.listBeingPlay._id === idNamePair._id) {
+        className = "selected-playlist"
     }
 
     let cardElement;
@@ -55,14 +67,15 @@ export default function PublishedListCard(props) {
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
+                onClick={event => {handlePlaylistClicked(event)}}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
@@ -73,14 +86,14 @@ export default function PublishedListCard(props) {
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton onClick={handleLike}>
+                        <IconButton onClick={handleLike} disabled={isLiked || isDisliked}>
                             <ThumbUpIcon />
                         </IconButton>
-                        10
-                        <IconButton onClick={handleDislike}>
+                        {idNamePair.likes}
+                        <IconButton onClick={handleDislike} disabled={isLiked || isDisliked}>
                             <ThumbDownIcon />
                         </IconButton>
-                        10
+                        {idNamePair.dislikes}
                     </div>
                     <div
                         style={{
@@ -91,8 +104,7 @@ export default function PublishedListCard(props) {
                     >
                         <IconButton
                             onClick={
-                                // handleLoadList(event, idNamePair._id);
-                                handleExpand
+                                event => {handleExpand(event)}
                             }
                         >
                             <DoubleDownArrowIcon fontSize='large' />
@@ -106,6 +118,7 @@ export default function PublishedListCard(props) {
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
@@ -113,8 +126,8 @@ export default function PublishedListCard(props) {
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
+                onClick={event => {handlePlaylistClicked(event)}}
             >
                 <div id='expand-box1'>
                     <div style={{ display: "flex" }}>
@@ -126,11 +139,11 @@ export default function PublishedListCard(props) {
                             <IconButton onClick={handleLike}>
                                 <ThumbUpIcon />
                             </IconButton>
-                            10
+                            {idNamePair.likes}
                             <IconButton onClick={handleDislike}>
                                 <ThumbDownIcon />
                             </IconButton>
-                            10
+                            {idNamePair.dislikes}
                         </div>
                     </div>
                 </div>
@@ -156,7 +169,7 @@ export default function PublishedListCard(props) {
                             bottom: "1px",
                         }}
                     >
-                        <IconButton onClick={handleUnexpand}>
+                        <IconButton onClick={event => {handleUnexpand(event)}}>
                             <DoubleUpArrowIcon fontSize='large' />
                         </IconButton>
                     </div>
@@ -168,13 +181,13 @@ export default function PublishedListCard(props) {
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
             >
                 <div id='unexpand-box1'>
@@ -189,11 +202,11 @@ export default function PublishedListCard(props) {
                         <IconButton onClick={handleLike}>
                             <ThumbUpIcon />
                         </IconButton>
-                        10
+                        {idNamePair.likes}
                         <IconButton onClick={handleDislike}>
                             <ThumbDownIcon />
                         </IconButton>
-                        10
+                        {idNamePair.dislikes}
                     </div>
                     <div
                         style={{
@@ -204,8 +217,7 @@ export default function PublishedListCard(props) {
                     >
                         <IconButton
                             onClick={
-                                // handleLoadList(event, idNamePair._id);
-                                handleExpand
+                                event => {handleExpand(event)}
                             }
                         >
                             <DoubleDownArrowIcon fontSize='large' />
