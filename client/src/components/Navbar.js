@@ -12,7 +12,7 @@ const Navbar = () => {
     }
 
     function directToAllList() {
-        history.push('/login');
+        history.push('/allList/');
     }
 
     return (

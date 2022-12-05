@@ -10,6 +10,7 @@ import {
     WorkspaceScreen
 } from './components'
 import MUIAlertModal from './components/MUIAlertModal';
+import AllListScreen from './components/AllListScreen';
 /*
     This is our application's top-level component.
     
@@ -27,10 +28,10 @@ const App = () => {
             <AuthContextProvider>
                 <GlobalStoreContextProvider>              
                     <Switch>
-                        <Route path="/" exact component={HomeWrapper} />
-                        <Route path="/login/" exact component={LoginScreen} />
-                        <Route path="/register/" exact component={RegisterScreen} />
-                        {/* <Route path="/playlist/:id" exact component={WorkspaceScreen} /> */}
+                        {/* <Route path="/allList/" exact component={AllListScreen} /> */}
+                        <Route path="/login/" component={LoginScreen} />
+                        <Route path="/register/" component={RegisterScreen} />
+                        <Route path="/" component={HomeWrapper} />
                     </Switch>
                     <MUIAlertModal />
                 </GlobalStoreContextProvider>

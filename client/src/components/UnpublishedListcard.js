@@ -11,7 +11,7 @@ import WorkspaceScreen from "./WorkspaceScreen";
 export default function UnpublishedListcard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
-    const { auth } = useContext(AuthContext);
+    // const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState(idNamePair.name);
     const [isExpand, setIsExpand] = useState(false);
@@ -54,7 +54,7 @@ export default function UnpublishedListcard(props) {
     }
 
     function handlePlaylistClicked(event) {
-        console.log(event.detail);
+        // console.log(event.detail);
         if (event.detail === 1)
             store.setListToPlay(idNamePair._id);
         else if (event.detail === 2) {
@@ -94,26 +94,31 @@ export default function UnpublishedListcard(props) {
         cardStatus = true;
     }
 
+    let className = "unselected-playlist";
+    if (store.listBeingPlay && store.listBeingPlay._id === idNamePair._id) {
+        className = "selected-playlist"
+    }
+
     let cardElement;
     if (!store.currentList)
         cardElement = (
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
                 // onDoubleClick={handleToggleEdit}
                 onClick={(event) => handlePlaylistClicked(event)}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {auth.getUserName()} </div>
+                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {idNamePair.userName} </div>
 
                 </div>
                 <div id='unexpand-box2'>
@@ -141,6 +146,7 @@ export default function UnpublishedListcard(props) {
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
@@ -148,12 +154,11 @@ export default function UnpublishedListcard(props) {
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
             >
                 <div id='expand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: {auth.getUserName()}</div>
+                    <div style={{ marginLeft: "10px" }}>By: {idNamePair.userName}</div>
                 </div>
 
                 <div id='expand-box2'>
@@ -193,20 +198,20 @@ export default function UnpublishedListcard(props) {
             <div
                 id={idNamePair._id}
                 key={idNamePair._id}
+                className={className}
                 style={{
                     marginTop: "5px",
                     display: "flex",
                     width: "100%",
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
-                    backgroundColor: "lightyellow",
                 }}
                 // onDoubleClick={handleToggleEdit}
                 onClick={(event) => {handlePlaylistClicked(event)}}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {auth.getUserName()} </div>
+                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {idNamePair.userName} </div>
 
                 </div>
                 <div id='unexpand-box2'>

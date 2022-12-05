@@ -35,7 +35,7 @@ export default function SplashScreen() {
           LOGIN
         </button>
         <button className='button' id='guess-button' type="button">
-          GUESS
+          GUEST
         </button>
       </div>
     </div>

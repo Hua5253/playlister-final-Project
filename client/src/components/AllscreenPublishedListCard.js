@@ -15,7 +15,7 @@ import DoubleUpArrowIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined
     
     @author McKilla Gorilla
 */
-export default function PublishedListCard(props) {
+export default function AllScreenPublishedListCard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -86,11 +86,11 @@ export default function PublishedListCard(props) {
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton onClick={handleLike}>
+                        <IconButton onClick={handleLike} disabled={isLiked || isDisliked}>
                             <ThumbUpIcon />
                         </IconButton>
                         {idNamePair.likes}
-                        <IconButton onClick={handleDislike}>
+                        <IconButton onClick={handleDislike} disabled={isLiked || isDisliked}>
                             <ThumbDownIcon />
                         </IconButton>
                         {idNamePair.dislikes}
@@ -158,8 +158,7 @@ export default function PublishedListCard(props) {
 
                 <div id='expand-box3' style={{ position: "relative" }}>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <button style={{ marginLeft: "60%" }} onClick={(event) => handleDeleteList(event, idNamePair._id)}>Delete</button>
-                        <button style={{ marginLeft: "5%" }}>Duplicate</button>
+                        <button style={{ marginLeft: "65%" }}>Duplicate</button>
                     </div>
                     <div style={{marginLeft:"10px", marginBottom:"15px"}}>published: {store.currentList.publishedDate} </div>
                     <div
