@@ -15,6 +15,7 @@ import NextIcon from '@mui/icons-material/FastForward';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { IconButton } from "@mui/material";
+import Comments from "./Comments";
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -203,7 +204,7 @@ const HomeScreen = () => {
                             </div>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Comments
+                            <Comments />
                         </TabPanel>
                     </div>
                 </div>

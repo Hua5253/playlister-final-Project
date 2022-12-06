@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalStoreContext } from "../store";
 import AppBanner from "./AppBanner";
-import ListCard from "./ListCard.js";
 import MUIDeleteModal from "./MUIDeleteModal";
 import YouTube from "react-youtube";
-import AppFooter from "./AppFooter";
 import Navbar from "./Navbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";

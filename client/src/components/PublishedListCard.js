@@ -1,8 +1,6 @@
-import { useContext, useState } from "react";
-import AuthContext from '../auth';
+import { useContext } from "react";
 import { GlobalStoreContext } from "../store";
 import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
 import ThumbUpIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDownOutlined";
 import DoubleDownArrowIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
@@ -18,9 +16,6 @@ import DoubleUpArrowIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined
 export default function PublishedListCard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
-    const { auth } = useContext(AuthContext);
-    const [isLiked, setIsLiked] = useState(false);
-    const [isDisliked, setIsDisliked] = useState(false);
 
     function handleExpand(event) {
         event.stopPropagation();
@@ -42,12 +37,10 @@ export default function PublishedListCard(props) {
     
     function handleLike() {
         store.likePlaylistById(idNamePair._id);
-        setIsLiked(true);
     }
 
     function handleDislike() {
         store.dislikePlaylistById(idNamePair._id);
-        setIsDisliked(true);
     }
 
     function handlePlaylistClicked(event) {

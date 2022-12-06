@@ -25,6 +25,7 @@ export const GlobalStoreActionType = {
   CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
   CREATE_NEW_LIST: "CREATE_NEW_LIST",
   LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
+  LOAD_PUBLISH_LIST_PAIRS: "LOAD_PUBLISH_LIST_PAIRS",
   GET_PUBLISHED_PLAYLIST_PAIRS: "GET_PUBLISHED_PLAYLIST_PAIRS",
   MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
   SET_CURRENT_LIST: "SET_CURRENT_LIST",
@@ -130,6 +131,21 @@ function GlobalStoreContextProvider(props) {
           currentModal: CurrentModal.NONE,
           idNamePairs: payload,
           publishedListPairs: store.publishedListPairs,
+          currentList: null,
+          currentSongIndex: -1,
+          currentSong: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+        });
+      }
+      case GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS: {
+        return setStore({
+          listBeingPlay: null,
+          currentModal: CurrentModal.NONE,
+          idNamePairs: store.idNamePairs,
+          publishedListPairs: payload,
           currentList: null,
           currentSongIndex: -1,
           currentSong: null,
@@ -287,6 +303,35 @@ function GlobalStoreContextProvider(props) {
   // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN
   // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
 
+  store.addCommentById = function(id, comment) {
+    console.log(comment);
+    async function asyncAddCommentById(id, comment) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        console.log(playlist.comments);
+        playlist.comments.push(comment);
+        console.log(playlist);
+        response = await api.updatePlaylistById(playlist._id, playlist);
+        if (response.data.success) {
+          console.log(response);
+          async function getListPairs() {
+            response = await api.getPlaylistPairs();
+            if (response.data.success) {
+              let pairsArray = response.data.idNamePairs;
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                payload: pairsArray,
+              })
+            }
+          }
+          getListPairs();
+        }
+      }
+    }
+    asyncAddCommentById(id, comment);
+  }
+
   store.publishPlaylist = function() {
     let list = store.currentList;
     list.isPublished = true;
@@ -338,6 +383,31 @@ function GlobalStoreContextProvider(props) {
     asyncLikePlaylistById(id);
   }
 
+  store.allList_likePlaylistById = function(id) {
+    async function asyncLikePlaylistById(id) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        playlist.likes = playlist.likes + 1;
+        response = await api.updatePlaylistById(playlist._id, playlist);
+        if (response.data.success) {
+          async function getListPairs() {
+            response = await api.getPublishedPlaylistPairs();
+            if (response.data.success) {
+              let pairsArray = response.data.pairs;
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS,
+                payload: pairsArray,
+              })
+            }
+          }
+          getListPairs();
+        }
+      }
+    }
+    asyncLikePlaylistById(id);
+  }
+
   store.dislikePlaylistById = function(id) {
     async function asyncdislikePlaylistById(id) {
       let response = await api.getPlaylistById(id);
@@ -352,6 +422,31 @@ function GlobalStoreContextProvider(props) {
               let pairsArray = response.data.idNamePairs;
               storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                payload: pairsArray,
+              })
+            }
+          }
+          getListPairs();
+        }
+      }
+    }
+    asyncdislikePlaylistById(id);
+  }
+
+  store.allList_dislikePlaylistById = function(id) {
+    async function asyncdislikePlaylistById(id) {
+      let response = await api.getPlaylistById(id);
+      if (response.data.success) {
+        let playlist = response.data.playlist;
+        playlist.dislikes = playlist.dislikes + 1;
+        response = await api.updatePlaylistById(playlist._id, playlist);
+        if (response.data.success) {
+          async function getListPairs() {
+            response = await api.getPublishedPlaylistPairs();
+            if (response.data.success) {
+              let pairsArray = response.data.pairs;
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS,
                 payload: pairsArray,
               })
             }

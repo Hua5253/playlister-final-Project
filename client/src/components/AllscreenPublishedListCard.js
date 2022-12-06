@@ -19,8 +19,6 @@ export default function AllScreenPublishedListCard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const [isLiked, setIsLiked] = useState(false);
-    const [isDisliked, setIsDisliked] = useState(false);
 
     function handleExpand(event) {
         event.stopPropagation();
@@ -32,22 +30,13 @@ export default function AllScreenPublishedListCard(props) {
         store.closeCurrentList();
         resetSongIndex();
     }
-
-    function handleDeleteList(event, id) {
-        event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
-    }
     
     function handleLike() {
-        store.likePlaylistById(idNamePair._id);
-        setIsLiked(true);
+        store.allList_likePlaylistById(idNamePair._id);
     }
 
     function handleDislike() {
-        store.dislikePlaylistById(idNamePair._id);
-        setIsDisliked(true);
+        store.allList_dislikePlaylistById(idNamePair._id);
     }
 
     function handlePlaylistClicked(event) {
@@ -86,11 +75,11 @@ export default function AllScreenPublishedListCard(props) {
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton onClick={handleLike} disabled={isLiked || isDisliked}>
+                        <IconButton onClick={handleLike}>
                             <ThumbUpIcon />
                         </IconButton>
                         {idNamePair.likes}
-                        <IconButton onClick={handleDislike} disabled={isLiked || isDisliked}>
+                        <IconButton onClick={handleDislike}>
                             <ThumbDownIcon />
                         </IconButton>
                         {idNamePair.dislikes}
