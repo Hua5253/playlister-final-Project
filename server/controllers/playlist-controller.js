@@ -214,6 +214,7 @@ updatePlaylist = async (req, res) => {
       playlist.publishedDate = body.playlist.publishedDate;
       playlist.isPublished = body.playlist.isPublished;
       playlist.likes = body.playlist.likes;
+      playlist.comments = body.playlist.comments;
       playlist.dislikes = body.playlist.dislikes;
       playlist.name = body.playlist.name;
       playlist.songs = body.playlist.songs;

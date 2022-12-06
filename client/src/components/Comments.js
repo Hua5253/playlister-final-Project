@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import GlobalStoreContext from "../store";
-import TextField from "@mui/material/TextField";
 
 export default function Comments() {
     const { store } = useContext(GlobalStoreContext);
@@ -13,6 +12,8 @@ export default function Comments() {
     }
 
     function handleBlur() {
+        if (text === "") return;
+        console.log(store.currentScreen);
         store.addCommentById(store.listBeingPlay._id, text);
     }
 
@@ -33,7 +34,7 @@ export default function Comments() {
             </div>
         );
     else {
-        console.log(store.listBeingPlay.comments);
+        // console.log(store.listBeingPlay.comments);
         return (
             <div>
                 <div className='comments'>
@@ -43,21 +44,6 @@ export default function Comments() {
                         </div>
                     ))}
                 </div>
-                {/* <TextField
-                    margin='normal'
-                    required
-                    fullWidth
-                    label='comment'
-                    autoComplete='comment'
-                    className='add-comment'
-                    onKeyPress={handleKeyPress}
-                    onBlur={handleBlur}
-                    onChange={handleUpdateText}
-                    defaultValue={text}
-                    inputProps={{ style: { fontSize: 48 } }}
-                    InputLabelProps={{ style: { fontSize: 24 } }}
-                    autoFocus
-                /> */}
                 <input
                     type={text}
                     className='add-comment'

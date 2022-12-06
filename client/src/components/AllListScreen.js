@@ -14,6 +14,7 @@ import PlayIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { IconButton } from "@mui/material";
 import AllScreenPublishedListCard from "./AllscreenPublishedListCard";
+import Comments from './Comments';
 
 const AllListScreen = () => {
     const { store } = useContext(GlobalStoreContext);
@@ -35,7 +36,7 @@ const AllListScreen = () => {
     }, []);
 
     // console.log(store.idNamePairs);
-    console.log(store.publishedListPairs);
+    // console.log(store.publishedListPairs);
 
     let listCard = "";
     if (store) {
@@ -198,7 +199,7 @@ const AllListScreen = () => {
                             </div>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Comments
+                            <Comments />
                         </TabPanel>
                     </div>
                 </div>

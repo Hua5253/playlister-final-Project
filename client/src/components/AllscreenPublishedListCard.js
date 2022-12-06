@@ -32,11 +32,11 @@ export default function AllScreenPublishedListCard(props) {
     }
     
     function handleLike() {
-        store.allList_likePlaylistById(idNamePair._id);
+        store.likePlaylistById(idNamePair._id);
     }
 
     function handleDislike() {
-        store.allList_dislikePlaylistById(idNamePair._id);
+        store.dislikePlaylistById(idNamePair._id);
     }
 
     function handlePlaylistClicked(event) {
