@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import AllScreenPublishedListCard from "./AllscreenPublishedListCard";
 import Comments from './Comments';
 
-const AllListScreen = () => {
+const UserScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
     const [value, setValue] = useState(0);
@@ -35,10 +35,6 @@ const AllListScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // console.log(store.idNamePairs);
-    // console.log(store.publishedListPairs);
-    // console.log(store.searchText);
-
     let listCard = "";
     if (store) {
         listCard = (
@@ -48,7 +44,7 @@ const AllListScreen = () => {
                     borderRadius: "20px",
                 }}
             >
-                {store.publishedListPairs.filter(pair => (pair.name.toLowerCase().includes((store.searchText).toLowerCase()))).map(pair => (
+                {store.publishedListPairs.filter(pair => pair.userName.toLowerCase().includes((store.searchText.toLowerCase()))).map(pair => (
                     <AllScreenPublishedListCard
                         key={pair._id}
                         idNamePair={pair}
@@ -210,4 +206,4 @@ const AllListScreen = () => {
     );
 };
 
-export default AllListScreen;
+export default UserScreen;

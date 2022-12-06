@@ -36,6 +36,7 @@ export const GlobalStoreActionType = {
   HIDE_MODALS: "HIDE_MODALS",
   UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
   SET_SCREEN: "SET_SCREEN",
+  SET_SEARCH_TEXT: "SET_SEARCH_TEXT",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -53,6 +54,7 @@ const CurrentModal = {
 function GlobalStoreContextProvider(props) {
   // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
   const [store, setStore] = useState({
+    searchText: "",
     currentScreen: "home",
     listBeingPlay: null,
     currentModal: CurrentModal.NONE,
@@ -79,8 +81,26 @@ function GlobalStoreContextProvider(props) {
   const storeReducer = action => {
     const { type, payload } = action;
     switch (type) {
+      case GlobalStoreActionType.SET_SEARCH_TEXT: {
+        return setStore({
+          searchText: payload,
+          currentScreen: store.currentScreen,
+          listBeingPlay: store.listBeingPlay,
+          currentModal: CurrentModal.NONE,
+          idNamePairs: store.idNamePairs,
+          publishedListPairs: store.publishedListPairs,
+          currentList: null,
+          currentSongIndex: -1,
+          currentSong: null,
+          newListCounter: 0,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+        })
+      }
       case GlobalStoreActionType.SET_SCREEN: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: payload,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -98,6 +118,7 @@ function GlobalStoreContextProvider(props) {
       // LIST UPDATE OF ITS NAME
       case GlobalStoreActionType.CHANGE_LIST_NAME: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -115,6 +136,7 @@ function GlobalStoreContextProvider(props) {
       // STOP EDITING THE CURRENT LIST
       case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -132,6 +154,7 @@ function GlobalStoreContextProvider(props) {
       // CREATE A NEW LIST
       case GlobalStoreActionType.CREATE_NEW_LIST: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -149,6 +172,7 @@ function GlobalStoreContextProvider(props) {
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
       case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -165,6 +189,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: null,
           currentModal: CurrentModal.NONE,
@@ -181,6 +206,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.GET_PUBLISHED_PLAYLIST_PAIRS: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -198,6 +224,7 @@ function GlobalStoreContextProvider(props) {
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.DELETE_LIST,
@@ -215,6 +242,7 @@ function GlobalStoreContextProvider(props) {
       // UPDATE A LIST
       case GlobalStoreActionType.SET_CURRENT_LIST: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -231,6 +259,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.SET_LIST_TO_PLAY: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: payload,
           currentModal: CurrentModal.NONE,
@@ -248,6 +277,7 @@ function GlobalStoreContextProvider(props) {
       // START EDITING A LIST NAME
       case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -265,6 +295,7 @@ function GlobalStoreContextProvider(props) {
       //
       case GlobalStoreActionType.EDIT_SONG: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.EDIT_SONG,
@@ -281,6 +312,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.REMOVE_SONG: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.REMOVE_SONG,
@@ -297,6 +329,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.HIDE_MODALS: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -313,6 +346,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.UNMARK_LIST_FOR_DELETION: {
         return setStore({
+          searchText: store.searchText,
           currentScreen: store.currentScreen,
           listBeingPlay: store.listBeingPlay,
           currentModal: CurrentModal.NONE,
@@ -335,6 +369,13 @@ function GlobalStoreContextProvider(props) {
   // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
   // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN
   // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
+
+  store.setSearchText = function(text) {
+    storeReducer({
+      type: GlobalStoreActionType.SET_SEARCH_TEXT,
+      payload: text,
+    })
+  }
 
   store.setScreen = function (screen) {
     storeReducer({
@@ -398,7 +439,7 @@ function GlobalStoreContextProvider(props) {
         })
       }
     }
-    else if (store.currentScreen === "allList") {
+    else if (store.currentScreen === "allList" || store.currentScreen === "user") {
       response = await api.getPublishedPlaylistPairs();
       if (response.data.success) {
         let pairsArray = response.data.pairs;

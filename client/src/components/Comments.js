@@ -21,7 +21,7 @@ export default function Comments() {
         setText(event.target.value);
     }
 
-    if (!store.listBeingPlay)
+    if (!store.listBeingPlay || !store.listBeingPlay.isPublished)
         return (
             <div>
                 <div className='comments'>
@@ -45,12 +45,12 @@ export default function Comments() {
                     ))}
                 </div>
                 <input
-                    type={text}
+                    type="text"
                     className='add-comment'
+                    autoComplete="comment"
                     onKeyPress={handleKeyPress}
                     onBlur={handleBlur}
                     onChange={handleUpdateText}
-                    defaultValue={text}
                 />
             </div>
         );
