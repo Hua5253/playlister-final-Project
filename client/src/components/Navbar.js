@@ -29,16 +29,19 @@ const Navbar = () => {
 
     function directToHome() {
         store.setScreen("home");
+        store.setSearchText("");
         history.push('/');
     }
 
     function directToAllList() {
         store.setScreen("allList");
+        store.setSearchText("");
         history.push('/allList/');
     }
 
     function directToUser() {
         store.setScreen("user");
+        store.setSearchText("");
         history.push('/user/');
     }
 

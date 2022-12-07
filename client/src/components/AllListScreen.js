@@ -39,26 +39,28 @@ const AllListScreen = () => {
     // console.log(store.publishedListPairs);
     // console.log(store.searchText);
 
-    let listCard = "";
+    let listCard;
     if (store) {
-        listCard = (
-            <div
-                style={{
-                    width: "100%",
-                    borderRadius: "20px",
-                }}
-            >
-                {store.publishedListPairs.filter(pair => (pair.name.toLowerCase().includes((store.searchText).toLowerCase()))).map(pair => (
-                    <AllScreenPublishedListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                        songIndex={songIndex}
-                        resetSongIndex={resetSongIndex}
-                    />
-                ))}
-            </div>
-        );
+        if (store.searchText) {
+            listCard = (
+                <div
+                    style={{
+                        width: "100%",
+                        borderRadius: "20px",
+                    }}
+                >
+                    {store.publishedListPairs.filter(pair => (pair.name.toLowerCase().includes((store.searchText).toLowerCase()))).map(pair => (
+                        <AllScreenPublishedListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                            songIndex={songIndex}
+                            resetSongIndex={resetSongIndex}
+                        />
+                    ))}
+                </div>
+            );
+        }
     }
 
     function TabPanel(props) {

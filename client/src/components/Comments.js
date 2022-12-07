@@ -1,11 +1,12 @@
 import { useContext, useState } from "react";
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import GlobalStoreContext from "../store";
 import AuthContext from "../auth";
 
 export default function Comments() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const history = useHistory();
     const [text, setText] = useState("");
 
     function handleKeyPress(event) {
@@ -21,6 +22,11 @@ export default function Comments() {
 
     function handleUpdateText(event) {
         setText(event.target.value);
+    }
+
+    function goToUserScreen(text) {
+        store.setSearchText(text);
+        history.push("/user/");
     }
 
     if (!store.listBeingPlay || !store.listBeingPlay.isPublished)
@@ -43,7 +49,7 @@ export default function Comments() {
                 <div className='comments'>
                     {store.listBeingPlay.comments.map(comment => (
                         <div key={comment} className='comment-card'>
-                            <div style={{fontSize:"10px"}}><Link to='/user/'>{comment.userName}</Link></div>
+                            <div style={{ fontSize: "10px" }} onClick={() => goToUserScreen(comment.userName)}>{comment.userName}</div>
                             <div>{comment.comment}</div>
                         </div>
                     ))}

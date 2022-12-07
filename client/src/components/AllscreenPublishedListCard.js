@@ -175,6 +175,7 @@ export default function AllScreenPublishedListCard(props) {
                             onClick={event =>
                                 handleDuplicateList(event, idNamePair._id)
                             }
+                            disabled={!auth.loggedIn}
                         >
                             Duplicate
                         </button>
