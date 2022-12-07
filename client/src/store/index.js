@@ -370,6 +370,66 @@ function GlobalStoreContextProvider(props) {
   // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN
   // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
 
+  store.sortBy = function(content) {
+    async function asyncSortBy() {
+      if (store.currentScreen === "home") {
+        let response = await api.getPlaylistPairs();
+        if (response.data.success) {
+          let pairsArray = response.data.idNamePairs;
+          if (content === "likes") {
+            pairsArray.sort((a, b) => (b.likes - a.likes))
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+              payload: pairsArray,
+            })
+          }
+          if (content === "dislikes") {
+            pairsArray.sort((a, b) => (b.dislikes - a.dislikes));
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+              payload: pairsArray,
+            })
+          }
+          if (content === "name") {
+            pairsArray.sort((a, b) => (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 1);
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+              payload: pairsArray,
+            })
+          }
+        }
+      }
+      else if (store.currentScreen === "allList" || store.currentScreen === "user") {
+        let response = await api.getPublishedPlaylistPairs();
+        if (response.data.success) {
+          let pairsArray = response.data.pairs;
+          if (content === "likes") {
+            pairsArray.sort((a, b) => (b.likes - a.likes))
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS,
+              payload: pairsArray,
+            })
+          }
+          if (content === "dislikes") {
+            pairsArray.sort((a, b) => (b.dislikes - a.dislikes));
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS,
+              payload: pairsArray,
+            })
+          }
+          if (content === "name") {
+            pairsArray.sort((a, b) => (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 1);
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_PUBLISH_LIST_PAIRS,
+              payload: pairsArray,
+            })
+          }
+        }
+      }
+    }
+    asyncSortBy();
+  }
+
   store.setSearchText = function(text) {
     storeReducer({
       type: GlobalStoreActionType.SET_SEARCH_TEXT,
