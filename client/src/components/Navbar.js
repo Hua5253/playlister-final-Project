@@ -56,7 +56,7 @@ const Navbar = () => {
     }
 
     function handleSortByDate() {
-        // store.sortBy("date");
+        store.sortBy("date");
         setAnchorEl(null);
     }
 

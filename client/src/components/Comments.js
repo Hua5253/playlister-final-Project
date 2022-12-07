@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Link } from 'react-router-dom';
 import GlobalStoreContext from "../store";
 
 export default function Comments() {
@@ -13,7 +14,6 @@ export default function Comments() {
 
     function handleBlur() {
         if (text === "") return;
-        console.log(store.currentScreen);
         store.addCommentById(store.listBeingPlay._id, text);
     }
 
@@ -29,6 +29,7 @@ export default function Comments() {
                 </div>
                 <input
                     type={text}
+                    disabled
                     className='add-comment'
                 />
             </div>
@@ -40,7 +41,8 @@ export default function Comments() {
                 <div className='comments'>
                     {store.listBeingPlay.comments.map(comment => (
                         <div key={comment} className='comment-card'>
-                            {comment}
+                            <div style={{fontSize:"10px"}}><Link to='/user/'>{comment.userName}</Link></div>
+                            <div>{comment.comment}</div>
                         </div>
                     ))}
                 </div>

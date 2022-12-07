@@ -13,7 +13,7 @@ const playlistSchema = new Schema(
         likes: {type: Number, default: 0, required: false},
         dislikes: {type: Number, default: 0, required: false},
         listens: {type: Number, required: false},
-        comments: {type: [String], required: false},
+        comments: {type: [{userName: String, comment: String}], required: false},
         name: { type: String, required: true },
         ownerEmail: { type: String, required: true },
         userName: {type: String, required: true},

@@ -7,10 +7,8 @@ import {
     HomeWrapper,
     LoginScreen,
     RegisterScreen,
-    WorkspaceScreen
 } from './components'
 import MUIAlertModal from './components/MUIAlertModal';
-import AllListScreen from './components/AllListScreen';
 /*
     This is our application's top-level component.
     

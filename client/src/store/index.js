@@ -397,6 +397,16 @@ function GlobalStoreContextProvider(props) {
               payload: pairsArray,
             })
           }
+          if (content === "date") {
+            console.log(pairsArray);
+            pairsArray.sort((a, b) => {
+              // console.log(new Date(a.publishedDate)); 
+            });
+            storeReducer({
+              type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+              payload: pairsArray,
+            })
+          }
         }
       }
       else if (store.currentScreen === "allList" || store.currentScreen === "user") {
@@ -476,7 +486,7 @@ function GlobalStoreContextProvider(props) {
       let response = await api.getPlaylistById(id);
       if (response.data.success) {
         let playlist = response.data.playlist;
-        playlist.comments.push(comment);
+        playlist.comments.push({userName: auth.user.userName, comment: comment});
         response = await api.updatePlaylistById(playlist._id, playlist);
         if (response.data.success) {
           // console.log(response);
