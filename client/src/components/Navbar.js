@@ -4,13 +4,16 @@ import { GlobalStoreContext } from "../store";
 import PersonIcon from '@mui/icons-material/PersonOutline';
 import PeopleIcon from '@mui/icons-material/Groups';
 import SortIcon from '@mui/icons-material/Sort';
+import SearchIcon from '@mui/icons-material/Search';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import AuthContext from "../auth";
 
 const Navbar = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [text, setText] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -91,14 +94,16 @@ const Navbar = () => {
         >
             <MenuItem onClick={handleSortByName}>Name(A-Z)</MenuItem>
             <MenuItem onClick={handleSortByDate}>Published Date(Newest)</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Listens (High - Low)</MenuItem>
             <MenuItem onClick={handleSortByLikes}>Likes (High - Low)</MenuItem>
             <MenuItem onClick={handleSortByDislikes}>Dislikes (High - Low)</MenuItem>
         </Menu>
     );
 
+    console.log(auth.loggedIn)
     return (
         <div id='navbar'>
-            <IconButton onClick={directToHome}>
+            <IconButton onClick={directToHome} disabled={!auth.loggedIn}>
                 <HomeIcon fontSize='large' />
             </IconButton >
             <IconButton onClick={directToAllList}>
@@ -107,10 +112,11 @@ const Navbar = () => {
             <IconButton onClick={directToUser}>
                 <PersonIcon fontSize='large' />
             </IconButton>
+            <SearchIcon fontSize="large" sx={{marginLeft: "15%", marginTop: "10px"}}/>
             <input
                 type="text"
                 className='search'
-                style={{marginTop: "8px", marginLeft: "10%", width: "27vw", borderRadius: "10px"}}
+                style={{width: "27vw", borderRadius: "10px"}}
                 onKeyPress={handleKeyPress}
                 onBlur={handleBlur}
                 onChange={handleUpdateText}

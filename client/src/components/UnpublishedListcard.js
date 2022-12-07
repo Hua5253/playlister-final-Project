@@ -52,6 +52,7 @@ export default function UnpublishedListcard(props) {
     }
 
     function handlePlaylistClicked(event) {
+        resetSongIndex();
         // console.log(event.detail);
         if (event.detail === 1) store.setListToPlay(idNamePair._id);
         else if (event.detail === 2) {

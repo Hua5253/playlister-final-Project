@@ -1,6 +1,9 @@
 import { useHistory } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../auth";
 
 export default function SplashScreen() {
+  const { auth } = useContext(AuthContext);
   const history = useHistory();
 
   function handleRegister() {
@@ -9,6 +12,11 @@ export default function SplashScreen() {
 
   function handleLogin() {
     history.push("/login/");
+  }
+
+  function handleLoginAsGuest() {
+    history.push("/allList/");
+    auth.loginAsGuest();
   }
 
   return (
@@ -34,7 +42,7 @@ export default function SplashScreen() {
         <button className='button' id='login-button' type="button" onClick={handleLogin}>
           LOGIN
         </button>
-        <button className='button' id='guess-button' type="button">
+        <button className='button' id='guess-button' type="button" onClick={handleLoginAsGuest}>
           GUEST
         </button>
       </div>

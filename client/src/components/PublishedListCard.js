@@ -49,6 +49,7 @@ export default function PublishedListCard(props) {
     }
 
     function handlePlaylistClicked(event) {
+        resetSongIndex();
         if (event.detail === 1) store.setListToPlay(idNamePair._id);
         else return;
     }

@@ -8,6 +8,7 @@ const AuthContext = createContext();
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
   GET_LOGGED_IN: "GET_LOGGED_IN",
+  LOGIN_AS_GUEST: "LOGIN_AS_GUEST",
   LOGIN_USER: "LOGIN_USER",
   LOGOUT_USER: "LOGOUT_USER",
   REGISTER_USER: "REGISTER_USER",
@@ -18,6 +19,7 @@ export const AuthActionType = {
 function AuthContextProvider(props) {
   const [auth, setAuth] = useState({
     user: null,
+    isGuest: false,
     loggedIn: false,
     error: { is_error: false, errorMessage: "" },
   });
@@ -34,24 +36,35 @@ function AuthContextProvider(props) {
       case AuthActionType.GET_LOGGED_IN: {
         return setAuth({
           user: payload.user,
+          isGuest: false,
           loggedIn: payload.loggedIn,
         });
+      }
+      case AuthActionType.LOGIN_AS_GUEST: {
+        return setAuth({
+          user: null,
+          isGuest: true,
+          loggedIn: false,
+        })
       }
       case AuthActionType.LOGIN_USER: {
         return setAuth({
           user: payload.user,
+          isGuest: false,
           loggedIn: true,
         });
       }
       case AuthActionType.LOGOUT_USER: {
         return setAuth({
           user: null,
+          isGuest: false,
           loggedIn: false,
         });
       }
       case AuthActionType.REGISTER_USER: {
         return setAuth({
           user: payload.user,
+          isGuest: false,
           loggedIn: true,
         });
       }
@@ -131,6 +144,12 @@ function AuthContextProvider(props) {
     }
   };
 
+  auth.loginAsGuest = function() {
+    authReducer({
+      type: AuthActionType.LOGIN_AS_GUEST,
+      payload: null,
+    })
+  }
   auth.loginUser = async function (email, password) {
     try {
       const response = await api.loginUser(email, password);

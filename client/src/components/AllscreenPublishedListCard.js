@@ -45,6 +45,7 @@ export default function AllScreenPublishedListCard(props) {
     }
 
     function handlePlaylistClicked(event) {
+        resetSongIndex();
         if (event.detail === 1) store.setListToPlay(idNamePair._id);
         else return;
     }
@@ -83,11 +84,11 @@ export default function AllScreenPublishedListCard(props) {
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton onClick={handleLike}>
+                        <IconButton onClick={handleLike} disabled={!auth.loggedIn}>
                             <ThumbUpIcon />
                         </IconButton>
                         {idNamePair.likes}
-                        <IconButton onClick={handleDislike}>
+                        <IconButton onClick={handleDislike} disabled={!auth.loggedIn}>
                             <ThumbDownIcon />
                         </IconButton>
                         {idNamePair.dislikes}
@@ -137,11 +138,11 @@ export default function AllScreenPublishedListCard(props) {
                             </div>
                         </div>
                         <div style={{ marginLeft: "10px" }}>
-                            <IconButton onClick={handleLike}>
+                            <IconButton onClick={handleLike} disabled={!auth.loggedIn}>
                                 <ThumbUpIcon />
                             </IconButton>
                             {idNamePair.likes}
-                            <IconButton onClick={handleDislike}>
+                            <IconButton onClick={handleDislike} disabled={!auth.loggedIn}>
                                 <ThumbDownIcon />
                             </IconButton>
                             {idNamePair.dislikes}
@@ -224,11 +225,11 @@ export default function AllScreenPublishedListCard(props) {
                 </div>
                 <div id='unexpand-box2'>
                     <div style={{ marginLeft: "10px" }}>
-                        <IconButton onClick={handleLike}>
+                        <IconButton onClick={handleLike} disabled={!auth.loggedIn}>
                             <ThumbUpIcon />
                         </IconButton>
                         {idNamePair.likes}
-                        <IconButton onClick={handleDislike}>
+                        <IconButton onClick={handleDislike} disabled={!auth.loggedIn}>
                             <ThumbDownIcon />
                         </IconButton>
                         {idNamePair.dislikes}

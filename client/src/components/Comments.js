@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { Link } from 'react-router-dom';
 import GlobalStoreContext from "../store";
+import AuthContext from "../auth";
 
 export default function Comments() {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [text, setText] = useState("");
 
     function handleKeyPress(event) {
@@ -48,6 +50,7 @@ export default function Comments() {
                 </div>
                 <input
                     type="text"
+                    disabled={!auth.loggedIn}
                     className='add-comment'
                     autoComplete="comment"
                     onKeyPress={handleKeyPress}

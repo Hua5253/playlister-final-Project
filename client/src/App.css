@@ -21,6 +21,11 @@ body {
   height: 90vh;
 }
 
+img {
+  width: 100px;
+  height: 40px;
+}
+
 #root {
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
