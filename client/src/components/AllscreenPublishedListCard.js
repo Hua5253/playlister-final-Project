@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import AuthContext from '../auth';
+import AuthContext from "../auth";
 import { GlobalStoreContext } from "../store";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -30,7 +30,7 @@ export default function AllScreenPublishedListCard(props) {
         store.closeCurrentList();
         resetSongIndex();
     }
-    
+
     function handleLike() {
         store.likePlaylistById(idNamePair._id);
     }
@@ -39,15 +39,19 @@ export default function AllScreenPublishedListCard(props) {
         store.dislikePlaylistById(idNamePair._id);
     }
 
+    function handleDuplicateList(event, id) {
+        event.stopPropagation();
+        store.duplicateList(id);
+    }
+
     function handlePlaylistClicked(event) {
-        if (event.detail === 1)
-            store.setListToPlay(idNamePair._id);
+        if (event.detail === 1) store.setListToPlay(idNamePair._id);
         else return;
     }
 
     let className = "unselected-playlist";
     if (store.listBeingPlay && store.listBeingPlay._id === idNamePair._id) {
-        className = "selected-playlist"
+        className = "selected-playlist";
     }
 
     let cardElement;
@@ -64,11 +68,15 @@ export default function AllScreenPublishedListCard(props) {
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
                 }}
-                onClick={event => {handlePlaylistClicked(event)}}
+                onClick={event => {
+                    handlePlaylistClicked(event);
+                }}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: {idNamePair.userName} </div>
+                    <div style={{ marginLeft: "10px" }}>
+                        By: {idNamePair.userName}{" "}
+                    </div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
                         published: {idNamePair.publishedDate}
                     </div>
@@ -92,9 +100,9 @@ export default function AllScreenPublishedListCard(props) {
                         }}
                     >
                         <IconButton
-                            onClick={
-                                event => {handleExpand(event)}
-                            }
+                            onClick={event => {
+                                handleExpand(event);
+                            }}
                         >
                             <DoubleDownArrowIcon fontSize='large' />
                         </IconButton>
@@ -116,13 +124,17 @@ export default function AllScreenPublishedListCard(props) {
                     border: "3px solid lightBlue",
                     borderRadius: "20px",
                 }}
-                onClick={event => {handlePlaylistClicked(event)}}
+                onClick={event => {
+                    handlePlaylistClicked(event);
+                }}
             >
                 <div id='expand-box1'>
                     <div style={{ display: "flex" }}>
-                        <div style={{width: "50%"}}>
+                        <div style={{ width: "50%" }}>
                             <div id='list-card-title'>{idNamePair.name}</div>
-                            <div style={{ marginLeft: "10px" }}>By: {idNamePair.userName}</div>
+                            <div style={{ marginLeft: "10px" }}>
+                                By: {idNamePair.userName}
+                            </div>
                         </div>
                         <div style={{ marginLeft: "10px" }}>
                             <IconButton onClick={handleLike}>
@@ -137,19 +149,38 @@ export default function AllScreenPublishedListCard(props) {
                     </div>
                 </div>
 
-                <div id='expand-box2' style={{ backgroundColor: "lightBlue", width: "94%", borderRadius: "10px", marginLeft: "3%" }}>
-                    {store.currentList.songs.map((song, index) => (<ul style={{ listStyleType: "none" }}>
-                        <li>
-                            {index + 1}. {song.title} by {song.artist}
-                        </li>
-                    </ul>))}
+                <div
+                    id='expand-box2'
+                    style={{
+                        backgroundColor: "lightBlue",
+                        width: "94%",
+                        borderRadius: "10px",
+                        marginLeft: "3%",
+                    }}
+                >
+                    {store.currentList.songs.map((song, index) => (
+                        <ul style={{ listStyleType: "none" }}>
+                            <li>
+                                {index + 1}. {song.title} by {song.artist}
+                            </li>
+                        </ul>
+                    ))}
                 </div>
 
                 <div id='expand-box3' style={{ position: "relative" }}>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <button style={{ marginLeft: "65%" }}>Duplicate</button>
+                        <button
+                            style={{ marginLeft: "65%" }}
+                            onClick={event =>
+                                handleDuplicateList(event, idNamePair._id)
+                            }
+                        >
+                            Duplicate
+                        </button>
                     </div>
-                    <div style={{marginLeft:"10px", marginBottom:"15px"}}>published: {store.currentList.publishedDate} </div>
+                    <div style={{ marginLeft: "10px", marginBottom: "15px" }}>
+                        published: {store.currentList.publishedDate}{" "}
+                    </div>
                     <div
                         style={{
                             position: "absolute",
@@ -157,7 +188,11 @@ export default function AllScreenPublishedListCard(props) {
                             bottom: "1px",
                         }}
                     >
-                        <IconButton onClick={event => {handleUnexpand(event)}}>
+                        <IconButton
+                            onClick={event => {
+                                handleUnexpand(event);
+                            }}
+                        >
                             <DoubleUpArrowIcon fontSize='large' />
                         </IconButton>
                     </div>
@@ -180,7 +215,9 @@ export default function AllScreenPublishedListCard(props) {
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: {idNamePair.userName}</div>
+                    <div style={{ marginLeft: "10px" }}>
+                        By: {idNamePair.userName}
+                    </div>
                     <div style={{ marginLeft: "10px", marginBottom: "7px" }}>
                         published: {idNamePair.publishedDate}
                     </div>
@@ -204,9 +241,9 @@ export default function AllScreenPublishedListCard(props) {
                         }}
                     >
                         <IconButton
-                            onClick={
-                                event => {handleExpand(event)}
-                            }
+                            onClick={event => {
+                                handleExpand(event);
+                            }}
                         >
                             <DoubleDownArrowIcon fontSize='large' />
                         </IconButton>

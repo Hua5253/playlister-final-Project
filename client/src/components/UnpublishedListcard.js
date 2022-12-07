@@ -6,7 +6,6 @@ import DoubleDownArrowIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutl
 import DoubleUpArrowIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import WorkspaceScreen from "./WorkspaceScreen";
 
-
 export default function UnpublishedListcard(props) {
     const { idNamePair, resetSongIndex } = props;
     const { store } = useContext(GlobalStoreContext);
@@ -35,6 +34,11 @@ export default function UnpublishedListcard(props) {
         store.markListForDeletion(id);
     }
 
+    function handleDuplicateList(event, id) {
+        event.stopPropagation();
+        store.duplicateList(id);
+    }
+
     function handleUndo() {
         store.undo();
     }
@@ -47,20 +51,13 @@ export default function UnpublishedListcard(props) {
         store.publishPlaylist();
     }
 
-    function handleToggleEdit(event) {
-        event.stopPropagation();
-        toggleEdit();
-    }
-
     function handlePlaylistClicked(event) {
         // console.log(event.detail);
-        if (event.detail === 1)
-            store.setListToPlay(idNamePair._id);
+        if (event.detail === 1) store.setListToPlay(idNamePair._id);
         else if (event.detail === 2) {
             event.stopPropagation();
-            toggleEdit()
-        }
-        else return;
+            toggleEdit();
+        } else return;
     }
 
     function toggleEdit() {
@@ -95,7 +92,7 @@ export default function UnpublishedListcard(props) {
 
     let className = "unselected-playlist";
     if (store.listBeingPlay && store.listBeingPlay._id === idNamePair._id) {
-        className = "selected-playlist"
+        className = "selected-playlist";
     }
 
     let cardElement;
@@ -113,15 +110,15 @@ export default function UnpublishedListcard(props) {
                     borderRadius: "20px",
                 }}
                 // onDoubleClick={handleToggleEdit}
-                onClick={(event) => handlePlaylistClicked(event)}
+                onClick={event => handlePlaylistClicked(event)}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {idNamePair.userName} </div>
-
+                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>
+                        By: {idNamePair.userName}{" "}
+                    </div>
                 </div>
                 <div id='unexpand-box2'>
-
                     <div
                         style={{
                             position: "absolute",
@@ -129,11 +126,7 @@ export default function UnpublishedListcard(props) {
                             bottom: "1px",
                         }}
                     >
-                        <IconButton
-                            onClick={
-                                (event) => handleExpand(event)
-                            }
-                        >
+                        <IconButton onClick={event => handleExpand(event)}>
                             <DoubleDownArrowIcon fontSize='large' />
                         </IconButton>
                     </div>
@@ -157,7 +150,9 @@ export default function UnpublishedListcard(props) {
             >
                 <div id='expand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px" }}>By: {idNamePair.userName}</div>
+                    <div style={{ marginLeft: "10px" }}>
+                        By: {idNamePair.userName}
+                    </div>
                 </div>
 
                 <div id='expand-box2'>
@@ -167,16 +162,40 @@ export default function UnpublishedListcard(props) {
 
                 <div id='expand-box3' style={{ position: "relative" }}>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <button style={{ marginLeft: "20px" }} onClick={handleUndo}>Undo</button>
-                        <button style={{ marginLeft: "5%" }} onClick={handleRedo}>Redo</button>
-                        <button style={{ marginLeft: "5%" }} onClick={handlePublish}>Publish</button>
+                        <button
+                            style={{ marginLeft: "20px" }}
+                            onClick={handleUndo}
+                        >
+                            Undo
+                        </button>
                         <button
                             style={{ marginLeft: "5%" }}
-                            onClick={(event) => handleDeleteList(event, idNamePair._id)}
+                            onClick={handleRedo}
+                        >
+                            Redo
+                        </button>
+                        <button
+                            style={{ marginLeft: "5%" }}
+                            onClick={handlePublish}
+                        >
+                            Publish
+                        </button>
+                        <button
+                            style={{ marginLeft: "5%" }}
+                            onClick={event =>
+                                handleDeleteList(event, idNamePair._id)
+                            }
                         >
                             Delete
                         </button>
-                        <button style={{ marginLeft: "5%" }}>Duplicate</button>
+                        <button
+                            style={{ marginLeft: "5%" }}
+                            onClick={event => {
+                                handleDuplicateList(event, idNamePair._id);
+                            }}
+                        >
+                            Duplicate
+                        </button>
                     </div>
                     <div
                         style={{
@@ -206,15 +225,17 @@ export default function UnpublishedListcard(props) {
                     borderRadius: "20px",
                 }}
                 // onDoubleClick={handleToggleEdit}
-                onClick={(event) => {handlePlaylistClicked(event)}}
+                onClick={event => {
+                    handlePlaylistClicked(event);
+                }}
             >
                 <div id='unexpand-box1'>
                     <div id='list-card-title'>{idNamePair.name}</div>
-                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>By: {idNamePair.userName} </div>
-
+                    <div style={{ marginLeft: "10px", marginBottom: "20px" }}>
+                        By: {idNamePair.userName}{" "}
+                    </div>
                 </div>
                 <div id='unexpand-box2'>
-
                     <div
                         style={{
                             position: "absolute",
@@ -222,11 +243,7 @@ export default function UnpublishedListcard(props) {
                             bottom: "1px",
                         }}
                     >
-                        <IconButton
-                            onClick={
-                                (event) => handleExpand(event)
-                            }
-                        >
+                        <IconButton onClick={event => handleExpand(event)}>
                             <DoubleDownArrowIcon fontSize='large' />
                         </IconButton>
                     </div>
